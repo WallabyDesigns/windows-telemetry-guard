@@ -1,14 +1,14 @@
 # TelemetryGuard
 
 A reversible Windows 10/11 telemetry and tracking hardening toolkit, from
-[Wallaby Designs](https://github.com/wallaby-designs). Everything it changes is
+[Wallaby Designs](https://wallabydesigns.com). Everything it changes is
 recorded in a timestamped backup first, so `Revert` restores your machine to exactly
 the state it was in before `Apply`.
 
 Two ways to use it:
-- **[TelemetryGuard.ps1](TelemetryGuard.ps1)** — the PowerShell engine. Scriptable,
+- **[TelemetryGuard.ps1](TelemetryGuard.ps1)**: the PowerShell engine. Scriptable,
   no dependencies beyond Windows PowerShell.
-- **[gui/](gui/)** — a small native Rust/egui desktop app that drives the same
+- **[gui/](gui/)**: a small native Rust/egui desktop app that drives the same
   script: a status dashboard plus one-click Apply/Revert with UAC elevation. See
   [gui/README.md](gui/README.md).
 
@@ -53,10 +53,10 @@ Sign out and back in (or reboot) after Apply/Revert for everything to take effec
   app-launch tracking disabled
 
 **Services (2)**
-- `DiagTrack` (Connected User Experiences and Telemetry) — disabled and stopped.
+- `DiagTrack` (Connected User Experiences and Telemetry): Disabled and stopped.
   This is the actual upload pipeline; disabling it is what makes the Pro-tier
   "Required" floor moot in practice.
-- `dmwappushservice` — WAP push routing, telemetry companion, unused on desktops
+- `dmwappushservice`: WAP push routing, telemetry companion, unused on desktops
 
 **Scheduled tasks (11)**
 - Compatibility Appraiser, ProgramDataUpdater, MareBackup, PcaPatchDbTask,
@@ -66,7 +66,7 @@ Sign out and back in (or reboot) after Apply/Revert for everything to take effec
 ## What -Strict adds
 
 - **Web search removed from the Start menu entirely** (`DisableWebSearch`,
-  `ConnectedSearchUseWeb`) — local search still works, but typing in Start will no
+  `ConnectedSearchUseWeb`): local search still works, but typing in Start will no
   longer show any web results
 - **Hosts-file block** of ~26 Microsoft telemetry endpoints (vortex/watson/events
   hosts), written between clear `TelemetryGuard BEGIN/END` markers so revert removes
@@ -104,10 +104,10 @@ gui/                 Rust/egui desktop GUI (see gui/README.md)
 
 ## License
 
-MIT © [Wallaby Designs](https://github.com/wallaby-designs). See [LICENSE](LICENSE).
+MIT © [Wallaby Designs](https://wallabydesigns.com). See [LICENSE](LICENSE).
 
 ## Contributing
 
 Issues and pull requests are welcome. This project deliberately never touches
-Windows Update, Defender, the Store, or activation — please keep it that way in any
+Windows Update, Defender, the Store, or activation. Please keep it that way in any
 contribution that expands the catalog in `lib/Catalog.ps1`.
