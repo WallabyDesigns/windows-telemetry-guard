@@ -1,0 +1,25 @@
+[package]
+name = "telemetry-guard-gui"
+version = "0.1.0"
+edition = "2021"
+authors = ["Wallaby Designs"]
+description = "GUI for TelemetryGuard - inspect, harden, and revert Windows telemetry settings"
+license = "MIT"
+
+[[bin]]
+name = "TelemetryGuardGui"
+path = "src/main.rs"
+
+[dependencies]
+eframe = "0.29"
+egui = "0.29"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = 2
+strip = true
+
+[package.metadata.winres]
+FileDescription = "TelemetryGuard"
+ProductName = "TelemetryGuard"
