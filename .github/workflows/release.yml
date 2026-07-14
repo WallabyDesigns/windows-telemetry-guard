@@ -1,0 +1,50 @@
+name: Release
+
+# Builds the GUI and publishes a ready-to-run download whenever a version
+# tag (v1.2.3) is pushed. No manual zipping - the artifact on the Releases
+# page is always built from that exact tag.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: gui
+
+      - name: Build GUI (release)
+        run: cargo build --release --manifest-path gui/Cargo.toml
+
+      - name: Package release folder
+        shell: pwsh
+        run: |
+          $stage = "dist/TelemetryGuard"
+          New-Item -ItemType Directory -Path $stage -Force | Out-Null
+          Copy-Item gui/target/release/TelemetryGuardGui.exe $stage/
+          Copy-Item TelemetryGuard.ps1 $stage/
+          Copy-Item -Recurse lib $stage/
+          Copy-Item README.md $stage/
+          Copy-Item LICENSE $stage/
+          $zipName = "TelemetryGuard-$($env:GITHUB_REF_NAME)-win64.zip"
+          Compress-Archive -Path "$stage/*" -DestinationPath "dist/$zipName"
+          echo "ZIP_PATH=dist/$zipName" >> $env:GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_PATH }}
+          generate_release_notes: true
